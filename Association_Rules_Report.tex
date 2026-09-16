@@ -1,0 +1,215 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage[table]{xcolor}
+
+\definecolor{navy}{RGB}{31,56,100}
+\definecolor{lightbg}{RGB}{237,242,248}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Association Rule Learning Assignment}
+\lhead{Groceries Dataset}
+\rfoot{\thepage}
+
+\title{\textbf{\color{navy}Association Rule Learning Assignment\\
+\large Market Basket Analysis of the Groceries Dataset}}
+\author{NKURUNZIZA Dany \\ Student ID: 101283 \\ Unsupervised Learning Methods}
+\date{13 September 2026}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\vspace{0.5cm}
+
+\section*{Question 1: Understand the Data}
+\begin{itemize}
+    \item[(a)] Number of transactions: \textbf{9,835}
+    \item[(b)] Number of unique grocery items: \textbf{169}
+\end{itemize}
+
+(c) The 10 most frequently purchased items are listed below, with whole milk and other vegetables standing out as by far the most common purchases:
+
+\begin{table}[H]
+\centering
+\rowcolors{2}{lightbg}{white}
+\begin{tabular}{@{}llrr@{}}
+\toprule
+\rowcolor{navy}
+\textcolor{white}{Rank} & \textcolor{white}{Item} & \textcolor{white}{Count} & \textcolor{white}{\% of transactions} \\ \midrule
+1  & whole milk       & 2513 & 25.55\% \\
+2  & other vegetables & 1903 & 19.35\% \\
+3  & rolls/buns       & 1809 & 18.39\% \\
+4  & soda             & 1715 & 17.44\% \\
+5  & yogurt           & 1372 & 13.95\% \\
+6  & bottled water    & 1087 & 11.05\% \\
+7  & root vegetables  & 1072 & 10.90\% \\
+8  & tropical fruit   & 1032 & 10.49\% \\
+9  & shopping bags    & 969  & 9.85\%  \\
+10 & sausage          & 924  & 9.40\%  \\
+\bottomrule
+\end{tabular}
+\caption{Top 10 most frequently purchased items.}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{top10_items.png}
+\caption{Top 10 most frequently purchased items.}
+\end{figure}
+
+\section*{Question 2: Frequent Itemsets}
+Using the Apriori algorithm with a minimum support threshold of 1\%, we identified 333 frequent itemsets (88 single items, 213 pairs, 32 triples). The 10 most frequent itemsets containing two or more products are:
+
+\begin{table}[H]
+\centering
+\rowcolors{2}{lightbg}{white}
+\begin{tabular}{@{}lr@{}}
+\toprule
+\rowcolor{navy}
+\textcolor{white}{Itemset} & \textcolor{white}{Support} \\ \midrule
+whole milk, other vegetables      & 0.0748 \\
+whole milk, rolls/buns            & 0.0566 \\
+whole milk, yogurt                & 0.0560 \\
+root vegetables, whole milk       & 0.0489 \\
+root vegetables, other vegetables & 0.0474 \\
+other vegetables, yogurt          & 0.0434 \\
+other vegetables, rolls/buns      & 0.0426 \\
+tropical fruit, whole milk        & 0.0423 \\
+soda, whole milk                  & 0.0401 \\
+soda, rolls/buns                  & 0.0383 \\
+\bottomrule
+\end{tabular}
+\caption{Top 10 frequent itemsets (2+ items) by support.}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{top10_itemsets.png}
+\caption{Top 10 frequent itemsets (2+ items) by support.}
+\end{figure}
+
+\subsection*{(c) Highest-support itemset}
+\{whole milk, other vegetables\}, with support = 0.0748. This pair appears together in 7.48\% of all 9,835 transactions (736 transactions).
+
+\subsection*{(d) What does support tell us about purchasing behavior?}
+Support measures how common an itemset is across all transactions. A support of 0.0748 means roughly 1 in every 13 shopping trips includes both whole milk and other vegetables. High-support itemsets reveal everyday, routine purchasing patterns shared by many different customers (grocery staples), while low-support itemsets reflect rarer, more niche combinations bought together by only a small fraction of customers.
+
+\section*{Question 3: Association Rules}
+Using confidence $\geq 0.3$ as the minimum threshold, 125 association rules were generated from the frequent itemsets above. The top 10 rules by confidence are:
+
+\begin{table}[H]
+\centering
+\rowcolors{2}{lightbg}{white}
+\small
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+\rowcolor{navy}
+\textcolor{white}{Antecedent} & \textcolor{white}{Consequent} & \textcolor{white}{Support} & \textcolor{white}{Confidence} & \textcolor{white}{Lift} \\ \midrule
+root vegetables, citrus fruit    & other vegetables & 0.0104 & 0.586 & 3.030 \\
+root vegetables, tropical fruit  & other vegetables & 0.0123 & 0.585 & 3.021 \\
+yogurt, curd                     & whole milk        & 0.0101 & 0.582 & 2.279 \\
+other vegetables, butter         & whole milk        & 0.0115 & 0.574 & 2.245 \\
+root vegetables, tropical fruit  & whole milk        & 0.0120 & 0.570 & 2.231 \\
+yogurt, root vegetables          & whole milk        & 0.0145 & 0.563 & 2.203 \\
+domestic eggs, other vegetables  & whole milk        & 0.0123 & 0.553 & 2.162 \\
+yogurt, whipped/sour cream       & whole milk        & 0.0109 & 0.525 & 2.053 \\
+rolls/buns, root vegetables      & whole milk        & 0.0127 & 0.523 & 2.047 \\
+other vegetables, pip fruit      & whole milk        & 0.0135 & 0.518 & 2.025 \\
+\bottomrule
+\end{tabular}
+\caption{Top 10 association rules by confidence.}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{rules_scatter.png}
+\caption{Support vs. confidence for all 125 rules, colored by lift.}
+\end{figure}
+
+\section*{Question 4: Understanding the Measures}
+
+\subsection*{Rule 1: \{root vegetables, citrus fruit\} $\rightarrow$ \{other vegetables\}}
+(support = 0.0104, confidence = 0.586, lift = 3.030)
+\begin{itemize}
+    \item \textbf{Support:} this three-item combination appears in 1.04\% of all transactions (about 102 of 9,835 trips).
+    \item \textbf{Confidence:} among customers who buy root vegetables and citrus fruit together, 58.6\% also buy other vegetables in the same trip.
+    \item \textbf{Lift:} these customers are 3.03 times more likely to also buy other vegetables than a random customer. This is a strong, genuine association.
+\end{itemize}
+
+\subsection*{Rule 2: \{yogurt, curd\} $\rightarrow$ \{whole milk\}}
+(support = 0.0101, confidence = 0.582, lift = 2.279)
+\begin{itemize}
+    \item \textbf{Support:} this combination appears in 1.01\% of all transactions.
+    \item \textbf{Confidence:} 58.2\% of customers who buy yogurt and curd together also buy whole milk.
+    \item \textbf{Lift:} 2.28 times more likely than a random customer to also buy whole milk. This is a strong but slightly weaker association than Rule 1.
+\end{itemize}
+
+\subsection*{Rule 3: \{domestic eggs, other vegetables\} $\rightarrow$ \{whole milk\}}
+(support = 0.0123, confidence = 0.553, lift = 2.162)
+\begin{itemize}
+    \item \textbf{Support:} this combination appears in 1.23\% of all transactions.
+    \item \textbf{Confidence:} 55.3\% of customers buying domestic eggs and other vegetables together also buy whole milk.
+    \item \textbf{Lift:} 2.16 times more likely than a random customer, again a meaningfully positive association.
+\end{itemize}
+
+\section*{Question 5: Find Interesting Rules}
+
+\begin{table}[H]
+\centering
+\rowcolors{2}{lightbg}{white}
+\begin{tabular}{@{}llr@{}}
+\toprule
+\rowcolor{navy}
+\textcolor{white}{Criterion} & \textcolor{white}{Rule} & \textcolor{white}{Value} \\ \midrule
+(a) Highest confidence & \{root vegetables, citrus fruit\} $\rightarrow$ \{other vegetables\} & 0.586 \\
+(b) Highest lift        & \{other vegetables, citrus fruit\} $\rightarrow$ \{root vegetables\} & 3.295 \\
+(c) Highest support      & \{other vegetables\} $\rightarrow$ \{whole milk\}                    & 0.0748 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection*{(d) Are these the same rule?}
+No, all three are different rules. This is expected: the highest-support rule involves only very popular, everyday items (other vegetables, whole milk). Support rewards items bought often by many customers, regardless of how strong the relationship between them actually is. The highest-confidence and highest-lift rules both involve root vegetables paired with citrus fruit/other vegetables, which are rarer combinations, but ones where buying the antecedent strongly predicts buying the consequent. Confidence and lift reward the strength of the relationship rather than sheer item popularity, so they tend to favor more specific, less universally-popular combinations. In short: support measures frequency, while confidence and lift measure predictive strength. An itemset can be common but only weakly associated, or rare but very strongly associated.
+
+\section*{Question 6: Interpret a Rule}
+Selected rule: \{root vegetables, citrus fruit\} $\rightarrow$ \{other vegetables\} (support = 0.0104, confidence = 0.586, lift = 3.030)
+
+\subsection*{In simple language}
+Customers who purchase root vegetables and citrus fruit in the same shopping trip also tend to purchase other vegetables in that same trip, about 59\% of the time.
+
+\subsection*{Strong or weak association?}
+This is a strong association, for two reasons. First, the confidence (0.586) is well above 50\%: more than half of customers who buy the antecedent items also buy the consequent. Second, the lift (3.030) is well above 1: these customers are three times more likely to buy other vegetables than a random customer, confirming the relationship is not simply because other vegetables is a generally popular item (it is popular, at $\sim$19\% of transactions, but 58.6\% confidence is far higher still). Together, these three items likely reflect a broader ``fresh produce'' or health-conscious shopping pattern.
+
+\section*{Question 7: Business Application}
+
+\subsection*{(a) Two products to place close to each other}
+Other vegetables and whole milk have the highest support (0.0748) of any 2-item combination, meaning a large share of shopping trips already include both. Placing them near each other would reduce walking distance for many customers and could encourage additional impulse purchases along the path between them.
+
+\subsection*{(b) A possible product bundle}
+A ``Fresh Produce Bundle'' of root vegetables + citrus fruit + other vegetables, based on the Question 6 rule (confidence 0.586, lift 3.03). A small discount on this three-item bundle would target customers already very likely to buy all three, potentially increasing basket size (e.g., a pre-packaged ``vegetable soup starter'' or ``salad kit'').
+
+\subsection*{(c) Example use of association rules for recommendations}
+When a customer's basket (in-store or online) contains root vegetables and citrus fruit, the store's recommendation system could automatically suggest other vegetables (``customers who bought these items also bought...'', or a checkout coupon). Since 58.6\% of similar customers already buy it together, this recommendation has a high chance of being genuinely useful rather than noise, improving both customer experience and average basket value.
+
+\section*{Question 8: Understanding Association}
+
+\subsection*{(a) Does an association rule prove causation?}
+No. An association rule only shows that items are frequently purchased together: it is a statement about co-occurrence, not causation. A high-confidence, high-lift rule does not mean buying the antecedent causes the consequent purchase. It is far more likely that both are driven by a common underlying cause, for example,\ a customer who generally prefers fresh, healthy food buys all three, or a customer cooking a particular meal needs several fresh ingredients at once. Establishing true causation would require a controlled experiment (e.g.\ actively repositioning items or running a promotion and measuring the causal effect on the other item's sales).
+
+\subsection*{(b) Why might a rule have high confidence but low lift?}
+This happens when the consequent item is already very popular on its own, regardless of the antecedent. For example, a rule X $\rightarrow$ \{whole milk\} could have high confidence simply because whole milk is bought in 25.6\% of all transactions, even customers buying an unrelated item X will often also buy whole milk purely by chance. If X doesn't actually make milk purchase more likely than the 25.6\% baseline rate, confidence can look high while lift stays close to (or below) 1, since lift specifically corrects confidence for the consequent's baseline popularity (lift = confidence / support(consequent)). High confidence with low lift is a warning sign the rule may be driven mainly by the consequent's popularity rather than a genuine relationship.
+
+\subsection*{(c) What does a lift value greater than 1 indicate?}
+A lift greater than 1 indicates a positive association: the antecedent and consequent occur together more often than would be expected if they were statistically independent. The higher above 1, the stronger the association; for example,\ a lift of 3.03 means the itemset co-occurs three times more often than pure chance would predict. (Lift = 1 means no association/statistical independence; lift $<$ 1 means a negative association, where items are purchased together less often than chance, as is typical of substitute products.)
+
+\section*{Conclusion}
+This analysis applied the Apriori algorithm to 9,835 real grocery transactions covering 169 unique items, identifying 333 frequent itemsets (support $\geq$ 1\%) and 125 association rules (confidence $\geq$ 30\%). The results consistently highlight whole milk, other vegetables, and root vegetables as central items around which many strong purchasing patterns revolve. The highest-support, highest-confidence, and highest-lift rules were all different, illustrating that these three measures capture distinct aspects of a rule's usefulness, frequency, reliability, and strength of association respectively, and should generally be considered together, not in isolation, when deciding which patterns are genuinely actionable for business decisions such as store layout, product bundling, and targeted recommendations.
+
+\end{document}
